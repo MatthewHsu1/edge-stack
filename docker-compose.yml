@@ -1,0 +1,43 @@
+services:
+  tailscale:
+      image: tailscale/tailscale:latest
+      hostname: ${TS_HOSTNAME}
+      env_file: .env
+      entrypoint: ["/bin/sh", "/usr/local/bin/render-funnel-and-start.sh"]
+      environment:
+        - TS_AUTHKEY=${TS_AUTHKEY}
+        - TS_DOMAIN=${TS_DOMAIN}
+        - TS_STATE_DIR=/var/lib/tailscale
+        - TS_EXTRA_ARGS=--advertise-tags=tag:server
+        - TS_SERVE_CONFIG=/config/funnel.json
+        - TS_USERSPACE=false
+      volumes:
+        - tailscale_data:/var/lib/tailscale
+        - ./funnel.json.template:/templates/funnel.json.template:ro
+        - ./render-funnel-and-start.sh:/usr/local/bin/render-funnel-and-start.sh:ro
+        - /dev/net/tun:/dev/net/tun
+      cap_add:
+        - NET_ADMIN
+        - SYS_MODULE
+      restart: unless-stopped
+
+  n8n:
+    image: n8nio/n8n:latest
+    network_mode: "service:tailscale"
+    depends_on:
+      - tailscale
+    environment:
+      - N8N_HOST=${TS_DOMAIN}
+      - N8N_PROTOCOL=https
+      - N8N_PORT=5678
+      - N8N_PATH=/n8n/
+      - N8N_EDITOR_BASE_URL=https://${TS_DOMAIN}
+      - WEBHOOK_URL=https://${TS_DOMAIN}/n8n/
+    volumes:
+      - n8n_data:/home/node/.n8n
+    restart: unless-stopped
+
+volumes:
+  tailscale_data:
+  n8n_data:
+    external: true

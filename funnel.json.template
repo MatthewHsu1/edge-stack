@@ -1,0 +1,19 @@
+{
+  "TCP": {
+    "443": {
+      "HTTPS": true
+    }
+  },
+  "Web": {
+    "${TS_DOMAIN}:443": {
+      "Handlers": {
+        "/n8n/": {
+          "Proxy": "http://127.0.0.1:5678"
+        }
+      }
+    }
+  },
+  "AllowFunnel": {
+    "${TS_DOMAIN}:443": true
+  }
+}

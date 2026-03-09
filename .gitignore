@@ -1,0 +1,58 @@
+# Project documentation
+docs/
+
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+!.env.template
+!.env.sample
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Temporary files and runtime artifacts
+tmp/
+temp/
+*.tmp
+*.pid
+*.seed
+
+# Dependency directories
+node_modules/
+
+# Build and cache output
+dist/
+build/
+coverage/
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.svelte-kit/
+.turbo/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
